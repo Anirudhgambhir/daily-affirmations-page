@@ -15,6 +15,7 @@
   <div class="container">
     <div class="card">
       <div class="title">✨ Your Affirmation for Today ✨</div>
+
       <div class="quote" id="quote">Loading...</div>
 
       <div class="meta">
@@ -27,40 +28,39 @@
   <!-- Affirmations & helpers -->
   <script src="affirmations.js"></script>
 
-  <!-- Simple interaction script -->
+  <!-- Interaction script -->
   <script>
-    function formatDisplayDate(date) {
-      return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    }
+    window.onload = function () {
+      function formatDisplayDate(date) {
+        return date.toLocaleDateString(undefined, { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
 
-    function showToday() {
-      const today = new Date();
-      document.getElementById('date').innerText = formatDisplayDate(today);
-      document.getElementById('quote').innerText = window.getAffirmationOfTheDay();
-    }
+      function showToday() {
+        const today = new Date();
+        document.getElementById('date').innerText = formatDisplayDate(today);
+        document.getElementById('quote').innerText = window.getAffirmationOfTheDay();
+      }
 
-    document.getElementById('copyBtn').addEventListener('click', function(){
-      window.copyTodayToClipboard().then(() => {
-        this.innerText = 'Copied!';
-        setTimeout(()=> this.innerText = 'Copy', 1400);
-      }).catch(()=> {
-        this.innerText = 'Failed';
-        setTimeout(()=> this.innerText = 'Copy', 1400);
+      // Copy button
+      document.getElementById('copyBtn').addEventListener('click', function () {
+        window.copyTodayToClipboard().then(() => {
+          this.innerText = 'Copied!';
+          setTimeout(() => this.innerText = 'Copy', 1400);
+        }).catch(() => {
+          this.innerText = 'Failed';
+          setTimeout(() => this.innerText = 'Copy', 1400);
+        });
       });
-    });
 
-    // Quick demo: show an affirmation for a random recent date
-    document.getElementById('newBtn').addEventListener('click', function(){
-      // show random date within +/- 180 days for demo
-      const now = new Date();
-      const offset = Math.floor(Math.random() * 361) - 180;
-      const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset);
-      document.getElementById('date').innerText = formatDisplayDate(dt);
-      document.getElementById('quote').innerText = window.getAffirmationForDate(dt.toISOString().split('T')[0]);
-    });
-
-    // initial render
-    window.onload = showToday;
+      // Initial load
+      showToday();
+    };
   </script>
+
 </body>
 </html>
