@@ -285,6 +285,16 @@ window.affirmations = [
 
 // --- helpers ---
 
+function getISTDate() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST = UTC+5:30
+  return new Date(now.getTime() + istOffset);
+}
+
+function getISTDateKey() {
+  return getISTDate().toISOString().split("T")[0];
+}
+
 /**
  * formatDateParts(date) -> { y, m, d }
  * accepts Date object
@@ -328,6 +338,10 @@ function deterministicIndexForDate(date){
  * dateString: "YYYY-MM-DD" or Date object
  */
 window.getAffirmationForDate = function(dateString){
+  // If no argument, default to IST today
+  if (!dateString) {
+    dateString = getISTDateKey();
+  }
   let idx = deterministicIndexForDate(dateString);
   return window.affirmations[idx];
 };
@@ -338,8 +352,7 @@ window.getAffirmationForDate = function(dateString){
  * so refreshes on the same day remain stable.
  */
 window.getAffirmationOfTheDay = function(){
-  const today = new Date();
-  const isoDate = today.toISOString().split("T")[0];
+  const isoDate = getISTDateKey();
 
   try {
     const savedDate = localStorage.getItem("affirmationDate");
